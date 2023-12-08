@@ -77,6 +77,15 @@ traverseQueue [] = 0
 traverseQueue ((_, b):rest) = 1 + traverseQueue (rest ++ spawnedCards)
     where 
         spawnedCards = take b rest
+
+
+backwardsFold :: (Int, Int) -> [(Int, Int)] -> (Int, Int)
+backwardsFold (loc, spawns) pool = (loc, 1 + childCards)
+    where 
+        childCards = sum [snd v | v <- pool, fst v > loc, fst v <= loc + spawns]
+
+constructCardCosts :: [(Int, Int)] -> [(Int, Int)] -> [(Int, Int)]
+constructCardCosts x:xs pool = (backwardsFold x pool) ++ pool
 -- countCreated :: [(Int, [Int])] -> Integer
 -- countCreated [] = 0
 -- countCreated ((_, spawns):rest) = 
@@ -90,9 +99,9 @@ main = do
     print ("Test Part 1 Value is " ++ show testPart1)
     print ("Input Part 1 Value is " ++ show inputPart1)
 
-    let testPart2 = countQuantityScratchers $ map scratcherParser testContent
-    let inputPart2 = countQuantityScratchers $ map scratcherParser inpContent
-    print ("Test Part 2 Value is " ++ show testPart2)
+    -- let testPart1 = countQuantityScratchers $ map scratcherParser testContent
+    -- let inputPart2 = countQuantityScratchers $ map scratcherParser inpContent
+    -- print ("Test Part 2 Value is " ++ show testPart2)
     -- print ("Input Part 2 Value is " ++ show inputPart2)
 
 
